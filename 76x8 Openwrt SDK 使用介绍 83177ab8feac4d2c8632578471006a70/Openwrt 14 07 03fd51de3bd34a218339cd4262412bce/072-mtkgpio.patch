@@ -1,0 +1,174 @@
+Index: linux-3.10.14/drivers/char/ralink_gpio.c
+===================================================================
+--- linux-3.10.14.orig/drivers/char/ralink_gpio.c	2015-12-31 12:16:18.000000000 +0800
++++ linux-3.10.14/drivers/char/ralink_gpio.c	2020-02-10 18:38:43.175742821 +0800
+@@ -141,9 +141,11 @@
+ #endif
+ void ralink_gpio_notify_user(int usr);
+ static struct work_struct gpio_event_hold;
++static struct work_struct gpio_event_hold_less6s;
+ static struct work_struct gpio_event_click;
+ 
+ 
++
+ MODULE_DESCRIPTION("Ralink SoC GPIO Driver");
+ MODULE_AUTHOR("Winfred Lu <winfred_lu@ralinktech.com.tw>");
+ MODULE_LICENSE("GPL");
+@@ -162,6 +164,12 @@
+     ralink_gpio_notify_user(2);
+ }
+ 
++void gpio_hold_less6s_notify(struct work_struct *work)
++{
++    ralink_gpio_notify_user(3);
++}
++
++
+ 
+ int ralink_gpio_led_set(ralink_gpio_led_info led)
+ {
+@@ -318,6 +326,18 @@
+ 	req &= RALINK_GPIO_DATA_MASK;
+ 
+ 	switch(req) {
++	case RALINK_GET_AGPIO_CFG:
++		tmp = le32_to_cpu(*(volatile u32 *)(RALINK_REG_AGPIOCFG));
++		put_user(tmp, (int __user *)arg);
++		break;
++	case RALINK_GET_GPIO1_MODE:
++		tmp = le32_to_cpu(*(volatile u32 *)(RALINK_REG_GPIOMODE));
++		put_user(tmp, (int __user *)arg);
++		break;
++	case RALINK_GPIO_GET_DIR:
++		tmp = le32_to_cpu(*(volatile u32 *)(RALINK_REG_PIODIR));
++		put_user(tmp, (int __user *)arg);
++		break;
+ 	case RALINK_GPIO_SET_DIR:
+ 		*(volatile u32 *)(RALINK_REG_PIODIR) = cpu_to_le32(arg);
+ 		break;
+@@ -531,6 +551,10 @@
+ 		*(volatile u32 *)(RALINK_REG_PIO2722SET) = cpu_to_le32(arg);
+ 		break;
+ #elif defined (RALINK_GPIO_HAS_9532)
++	case RALINK_GPIO6332_GET_DIR:
++		tmp = le32_to_cpu(*(volatile u32 *)(RALINK_REG_PIO6332DIR));
++		put_user(tmp, (int __user *)arg);
++		break;
+ 	case RALINK_GPIO6332_SET_DIR:
+ 		*(volatile u32 *)(RALINK_REG_PIO6332DIR) = cpu_to_le32(arg);
+ 		break;
+@@ -560,6 +584,10 @@
+ 	case RALINK_GPIO9564_SET_DIR:
+ 		*(volatile u32 *)(RALINK_REG_PIO9564DIR) = cpu_to_le32(arg);
+ 		break;
++	case RALINK_GPIO9564_GET_DIR:
++		tmp = le32_to_cpu(*(volatile u32 *)(RALINK_REG_PIO9564DIR));
++		put_user(tmp, (int __user *)arg);
++		break;
+ 	case RALINK_GPIO9564_SET_DIR_IN:
+ 		tmp = le32_to_cpu(*(volatile u32 *)(RALINK_REG_PIO9564DIR));
+ 		tmp &= ~cpu_to_le32(arg);
+@@ -824,6 +852,7 @@
+ 	try_module_get(THIS_MODULE);
+ #endif
+     INIT_WORK(&gpio_event_hold, gpio_hold_notify);
++	INIT_WORK(&gpio_event_hold_less6s, gpio_hold_less6s_notify);
+     INIT_WORK(&gpio_event_click, gpio_click_notify);
+ 	return 0;
+ }
+@@ -2579,15 +2608,15 @@
+ 		return;
+ 	}
+ 
+-	if (usr == 1) {
++	if (1 == usr) {
+ 		#if defined (CONFIG_FB_MEDIATEK_ILITEK) || defined (CONFIG_FB_MEDIATEK_TRULY)&& defined (CONFIG_RALINK_MT7621)
+ 		#else
+ 		printk(KERN_NOTICE NAME ": sending a SIGUSR1 to process %d\n",
+ 				ralink_gpio_info[ralink_gpio_irqnum].pid);
+ 		#endif
+-		send_sig(SIGUSR1, p, 0);
++		send_sig((SIGRTMIN+10), p, 0);
+ 	}
+-	else if (usr == 2) {
++	else if (2 == usr) {
+ 		#if defined (CONFIG_FB_MEDIATEK_ILITEK) || defined (CONFIG_FB_MEDIATEK_TRULY)&& defined (CONFIG_RALINK_MT7621)
+ 		#else
+ 		printk(KERN_NOTICE NAME ": sending a SIGUSR2 to process %d\n",
+@@ -2595,6 +2624,12 @@
+ 		#endif
+ 		send_sig(SIGUSR2, p, 0);
+ 	}
++	else if (3 == usr) {
++		printk(KERN_NOTICE NAME ": sending a SIGUSR3 to process %d\n",
++				ralink_gpio_info[ralink_gpio_irqnum].pid);
++		send_sig(SIGUSR1, p, 0);
++
++	}
+ }
+ 
+ /*
+@@ -2791,14 +2826,17 @@
+ 		ralink_gpio_irqnum = i;
+ 		if (ralink_gpio6332_edge & (1 << (i - 32))) {
+ 			if (record[i].rising != 0 && time_before_eq(now,
+-						record[i].rising + 40L)) {
++						record[i].rising + 50L)) {	//防抖
+ 			}
+ 			else {
+ 				record[i].rising = now;
+-				if (time_before(now, record[i].falling + 200L)) {
++				if (time_before(now, record[i].falling + 250L)) {  
+ 					schedule_work(&gpio_event_click);
+-				}
+-				else {
++				} else if (time_before(now, record[i].falling + HZ*6)) {
++					//<6s
++					printk("holding time<6s hz=%d\n",HZ);
++					schedule_work(&gpio_event_hold_less6s);
++				} else {
+ 					schedule_work(&gpio_event_hold);
+ 				}
+ 			}
+Index: linux-3.10.14/drivers/char/ralink_gpio.h
+===================================================================
+--- linux-3.10.14.orig/drivers/char/ralink_gpio.h	2015-12-31 12:16:18.000000000 +0800
++++ linux-3.10.14/drivers/char/ralink_gpio.h	2020-02-10 16:44:21.131583878 +0800
+@@ -61,10 +61,13 @@
+  * ioctl commands
+  */
+ #define	RALINK_GPIO_SET_DIR		0x01
++#define RALINK_GPIO_GET_DIR		0x64
+ #define RALINK_GPIO_SET_DIR_IN		0x11
+ #define RALINK_GPIO_SET_DIR_OUT		0x12
+ #define	RALINK_GPIO_READ		0x02
+ #define	RALINK_GPIO_WRITE		0x03
++#define RALINK_GET_GPIO1_MODE   0x04
++#define RALINK_GET_AGPIO_CFG   	0x05
+ #define	RALINK_GPIO_SET			0x21
+ #define	RALINK_GPIO_CLEAR		0x31
+ #define	RALINK_GPIO_READ_INT		0x02 //same as read
+@@ -160,6 +163,7 @@
+ 
+ #elif defined (RALINK_GPIO_HAS_9532)
+ 
++#define RALINK_GPIO6332_GET_DIR		0x65
+ #define	RALINK_GPIO6332_SET_DIR		0x51
+ #define RALINK_GPIO6332_SET_DIR_IN	0x13
+ #define RALINK_GPIO6332_SET_DIR_OUT	0x14
+@@ -167,6 +171,7 @@
+ #define	RALINK_GPIO6332_WRITE		0x53
+ #define	RALINK_GPIO6332_SET		0x22
+ #define	RALINK_GPIO6332_CLEAR		0x32
++#define RALINK_GPIO9564_GET_DIR		0x66
+ 
+ #define	RALINK_GPIO9564_SET_DIR		0x61
+ #define RALINK_GPIO9564_SET_DIR_IN	0x15
+@@ -183,6 +188,7 @@
+  */
+ #define RALINK_SYSCTL_ADDR		RALINK_SYSCTL_BASE	// system control
+ #define RALINK_REG_GPIOMODE		(RALINK_SYSCTL_ADDR + 0x60)
++#define RALINK_REG_AGPIOCFG		(RALINK_SYSCTL_ADDR + 0x3C)
+ 
+ #if defined (CONFIG_RALINK_MT7628)
+ #define RALINK_REG_GPIOMODE2		(RALINK_SYSCTL_ADDR + 0x64)

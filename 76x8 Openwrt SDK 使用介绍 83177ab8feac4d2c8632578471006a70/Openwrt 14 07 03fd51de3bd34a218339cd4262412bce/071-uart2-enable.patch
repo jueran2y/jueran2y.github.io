@@ -1,0 +1,59 @@
+Index: linux-3.10.14/arch/mips/ralink/init.c
+===================================================================
+--- linux-3.10.14.orig/arch/mips/ralink/init.c	2015-12-31 11:54:49.000000000 +0800
++++ linux-3.10.14/arch/mips/ralink/init.c	2019-12-02 16:30:21.688643616 +0800
+@@ -676,7 +676,7 @@
+ ** To get the correct baud_base value, prom_init_sysclk() must be called before
+ ** this function is called.
+ */
+-static struct uart_port serial_req[2];
++static struct uart_port serial_req[3];
+ __init int prom_init_serial_port(void)
+ {
+ 
+@@ -684,7 +684,7 @@
+    * baud rate = system clock freq / (CLKDIV * 16)
+    * CLKDIV=system clock freq/16/baud rate
+    */
+-  memset(serial_req, 0, 2*sizeof(struct uart_port));
++  memset(serial_req, 0, 3*sizeof(struct uart_port));
+ 
+   serial_req[0].type       = PORT_16550A;
+   serial_req[0].line       = 0;
+@@ -728,8 +728,36 @@
+   serial_req[1].mapbase    = RALINK_UART_LITE_BASE;
+   serial_req[1].membase    = ioremap_nocache(RALINK_UART_LITE_BASE, PAGE_SIZE);
+ 
++
++#if CONFIG_SERIAL_8250_RUNTIME_UARTS == 3
++  serial_req[2].type       = PORT_16550A;
++  serial_req[2].line       = 2;
++  serial_req[2].irq        = SURFBOARDINT_UART_LITE3;
++  serial_req[2].flags      = UPF_FIXED_TYPE;
++#if defined (CONFIG_RALINK_RT3883) || defined (CONFIG_RALINK_RT3352) ||  defined (CONFIG_RALINK_RT5350) || defined (CONFIG_RALINK_RT6855) || defined (CONFIG_RALINK_MT7620) || defined (CONFIG_RALINK_MT7628)
++  serial_req[2].uartclk    = 40000000;
++#elif defined (CONFIG_RALINK_MT7621)
++  serial_req[2].uartclk    = 50000000;
++#else
++  serial_req[2].uartclk    = surfboard_sysclk;
++#endif
++
++#if defined (CONFIG_RALINK_MT7621) || defined (CONFIG_RALINK_MT7628)
++  serial_req[2].iotype     = UPIO_MEM32;
++#else
++  serial_req[2].iotype     = UPIO_AU;
++#endif
++  serial_req[2].regshift   = 2;
++  serial_req[2].mapbase    = RALINK_UART_LITE3_BASE;
++  serial_req[2].membase    = ioremap_nocache(RALINK_UART_LITE3_BASE, PAGE_SIZE);
++#endif
++
+   early_serial_setup(&serial_req[0]);
+   early_serial_setup(&serial_req[1]);
++#if CONFIG_SERIAL_8250_RUNTIME_UARTS == 3
++  early_serial_setup(&serial_req[2]);
++#endif
++
+ 
+   return(0);
+ }

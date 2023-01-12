@@ -1,0 +1,90 @@
+Index: linux-4.14.171/drivers/usb/serial/option.c
+===================================================================
+--- linux-4.14.171.orig/drivers/usb/serial/option.c	2020-02-15 05:32:24.000000000 +0800
++++ linux-4.14.171/drivers/usb/serial/option.c	2022-12-23 15:07:22.631328373 +0800
+@@ -558,7 +558,7 @@
+ #define WETELECOM_PRODUCT_WMD200		0x6801
+ #define WETELECOM_PRODUCT_6802			0x6802
+ #define WETELECOM_PRODUCT_WMD300		0x6803
+-
++#define QUECTEL_PRODUCT_EC200T			0x6026
+ 
+ /* Device flags */
+ 
+@@ -1102,6 +1102,7 @@
+ 	  .driver_info = RSVD(4) },
+ 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96),
+ 	  .driver_info = RSVD(4) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
+ 	  .driver_info = RSVD(1) | RSVD(2) | RSVD(3) | RSVD(4) | NUMEP2 },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0, 0) },
+@@ -2053,6 +2054,10 @@
+ 	.suspend           = usb_wwan_suspend,
+ 	.resume            = usb_wwan_resume,
+ #endif
++#if 1 //Added by Quectel
++	.reset_resume = usb_wwan_resume,
++#endif
++
+ };
+ 
+ static struct usb_serial_driver * const serial_drivers[] = {
+@@ -2069,6 +2074,37 @@
+ 	struct usb_device_descriptor *dev_desc = &serial->dev->descriptor;
+ 	unsigned long device_flags = id->driver_info;
+ 
++#if 1 //Added by Quectel
++	//Quectel UC20's interface 4 can be used as USB Network device
++	if (dev_desc->idVendor == cpu_to_le16(0x05C6) && dev_desc->idProduct == cpu_to_le16(0x9003)
++			&& serial->interface->cur_altsetting->desc.bInterfaceNumber >=4) {
++			printk("######## %s %d\n", __FUNCTION__, __LINE__);
++			return -ENODEV;
++	}
++	//Quectel EC20's interface 4 can be used as USB Network device
++	if (dev_desc->idVendor == cpu_to_le16(0x05C6) && dev_desc->idProduct == cpu_to_le16(0x9215)
++			&& serial->interface->cur_altsetting->desc.bInterfaceNumber >=4) {
++			printk("######## %s %d\n", __FUNCTION__, __LINE__);
++			return -ENODEV;
++	}
++	
++	if (serial->dev->descriptor.idVendor == cpu_to_le16(0x2C7C)) {
++		__u16 idProduct = le16_to_cpu(serial->dev->descriptor.idProduct);
++		//some interfaces can be used as USB Network device (ecm, rndis, mbim)
++		if (serial->interface->cur_altsetting->desc.bInterfaceClass != 0xFF) {
++			printk("######## %s %d\n", __FUNCTION__, __LINE__);
++			return -ENODEV;
++		}
++	
++		//Quectel EC25&EC21&EG91@EG95&EG06&EP06&EM06&BG96&AG35&EG12&EG18's interface 4 can be used as USB Network device(qmi, ecm, mbim)
++		if ((idProduct != 0x6026 && idProduct != 0x6126 && idProduct != 0x6002 && idProduct != 0x0901 && idProduct != 0x0900)
++			&& serial->interface->cur_altsetting->desc.bInterfaceNumber >= 4) {
++			printk("######## %s %d\n", __FUNCTION__, __LINE__);
++			return -ENODEV;
++		}
++	}
++#endif
++
+ 	/* Never bind to the CD-Rom emulation interface	*/
+ 	if (iface_desc->bInterfaceClass == 0x08)
+ 		return -ENODEV;
+Index: linux-4.14.171/drivers/usb/serial/usb_wwan.c
+===================================================================
+--- linux-4.14.171.orig/drivers/usb/serial/usb_wwan.c	2020-02-15 05:32:24.000000000 +0800
++++ linux-4.14.171/drivers/usb/serial/usb_wwan.c	2022-12-23 15:08:10.919328373 +0800
+@@ -503,6 +503,15 @@
+ 			  usb_sndbulkpipe(serial->dev, endpoint) | dir,
+ 			  buf, len, callback, ctx);
+ 
++	#if 1 //Added by Quectel for zero packet
++	if (dir == USB_DIR_OUT) {
++		struct usb_device_descriptor *desc = &serial->dev->descriptor;
++		if (desc->idVendor == cpu_to_le16(0x2C7C))
++			urb->transfer_flags |= URB_ZERO_PACKET;
++	}
++	#endif
++
++
+ 	if (intfdata->use_zlp && dir == USB_DIR_OUT)
+ 		urb->transfer_flags |= URB_ZERO_PACKET;
+ 

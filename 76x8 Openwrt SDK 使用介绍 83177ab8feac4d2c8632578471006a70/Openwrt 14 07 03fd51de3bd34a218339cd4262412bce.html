@@ -1,0 +1,955 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Openwrt 14.07</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="03fd51de-3bd3-4a21-8339-cd4262412bce" class="page sans"><header><h1 class="page-title">Openwrt 14.07</h1><table class="properties"><tbody><tr class="property-row property-row-multi_select"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesMultipleSelect"><path d="M1.91602 4.83789C2.44238 4.83789 2.87305 4.40723 2.87305 3.87402C2.87305 3.34766 2.44238 2.91699 1.91602 2.91699C1.38281 2.91699 0.952148 3.34766 0.952148 3.87402C0.952148 4.40723 1.38281 4.83789 1.91602 4.83789ZM5.1084 4.52344H14.3984C14.7607 4.52344 15.0479 4.23633 15.0479 3.87402C15.0479 3.51172 14.7607 3.22461 14.3984 3.22461H5.1084C4.74609 3.22461 4.45898 3.51172 4.45898 3.87402C4.45898 4.23633 4.74609 4.52344 5.1084 4.52344ZM1.91602 9.03516C2.44238 9.03516 2.87305 8.60449 2.87305 8.07129C2.87305 7.54492 2.44238 7.11426 1.91602 7.11426C1.38281 7.11426 0.952148 7.54492 0.952148 8.07129C0.952148 8.60449 1.38281 9.03516 1.91602 9.03516ZM5.1084 8.7207H14.3984C14.7607 8.7207 15.0479 8.43359 15.0479 8.07129C15.0479 7.70898 14.7607 7.42188 14.3984 7.42188H5.1084C4.74609 7.42188 4.45898 7.70898 4.45898 8.07129C4.45898 8.43359 4.74609 8.7207 5.1084 8.7207ZM1.91602 13.2324C2.44238 13.2324 2.87305 12.8018 2.87305 12.2686C2.87305 11.7422 2.44238 11.3115 1.91602 11.3115C1.38281 11.3115 0.952148 11.7422 0.952148 12.2686C0.952148 12.8018 1.38281 13.2324 1.91602 13.2324ZM5.1084 12.918H14.3984C14.7607 12.918 15.0479 12.6309 15.0479 12.2686C15.0479 11.9062 14.7607 11.6191 14.3984 11.6191H5.1084C4.74609 11.6191 4.45898 11.9062 4.45898 12.2686C4.45898 12.6309 4.74609 12.918 5.1084 12.918Z"></path></svg></span>Tags</th><td><span class="selected-value select-value-color-orange">Editing</span></td></tr><tr class="property-row property-row-created_time"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Date Created</th><td><time>@December 19, 2022 3:04 PM</time></td></tr><tr class="property-row property-row-last_edited_time"><th><span class="icon property-icon"><svg viewBox="0 0 16 16" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesCreatedAt"><path d="M8 15.126C11.8623 15.126 15.0615 11.9336 15.0615 8.06445C15.0615 4.20215 11.8623 1.00293 7.99316 1.00293C4.13086 1.00293 0.938477 4.20215 0.938477 8.06445C0.938477 11.9336 4.1377 15.126 8 15.126ZM8 13.7383C4.85547 13.7383 2.33301 11.209 2.33301 8.06445C2.33301 4.91992 4.84863 2.39746 7.99316 2.39746C11.1377 2.39746 13.6738 4.91992 13.6738 8.06445C13.6738 11.209 11.1445 13.7383 8 13.7383ZM4.54102 8.91211H7.99316C8.30078 8.91211 8.54004 8.67285 8.54004 8.37207V3.8877C8.54004 3.58691 8.30078 3.34766 7.99316 3.34766C7.69238 3.34766 7.45312 3.58691 7.45312 3.8877V7.83203H4.54102C4.2334 7.83203 4.00098 8.06445 4.00098 8.37207C4.00098 8.67285 4.2334 8.91211 4.54102 8.91211Z"></path></svg></span>Last Updated</th><td><time>@January 12, 2023 11:32 AM</time></td></tr></tbody></table></header><div class="page-body"><nav id="10043613-593e-4c40-81d1-e32810a822d7" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#2480062c-341f-49f6-a123-980243425f6d"><strong>MTK提供的Openwrt版本</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8e3440ad-c7c8-481d-a9e0-d3ac46519ce8"><strong>Openwrt编译环境</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7d19ac7c-62b3-4432-a2ff-ebe156612403"><strong>虚拟机的构建方法：</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#48c7b1d6-f4e0-4d36-8be5-2239326ca1bc">新建一个虚拟机</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7b469cf8-0bf2-4528-97ed-a72df22f5a51">设置CPU 网络等参数</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e0b10f18-44d8-4dbf-9cb5-cc2ae1e9fcfe"><strong>Openwrt配置编译</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#460f0e9e-b190-4747-a921-91357007ec20"><strong>使用reg 命令控制7688/7628的寄存器</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e2fabf0a-1857-480e-9ad0-8e56cdba066c"><strong>配置WIFI的STA功能</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3f2853a6-2422-4b05-b5ea-e70131e21a40"><strong>Openwrt的出厂配置恢复方法</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c4d20d8c-bf18-42c3-9e7b-c8f3572a85ec"><strong>Openwrt中的网口配置</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8dd71bce-51ba-4b24-a29d-f9642b05f4dd"><strong>在openwrt中添加自己的应用并编译到固件中</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#71b63852-fe70-40e1-8ad2-f71befa4b5d7"><strong>使用C语言控制GPIO</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#485e7523-2e7b-44ec-bf42-bdaf47941cb8">MTK openwrt的GPIO驱动中实现了三个功能</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#24c563dd-3b6c-4b8f-b178-157d78088f3d"><strong>VLAN设置</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#78e1d204-65df-4fd4-8993-f74a7ea2b02b"><strong>Port和vlan相关属性</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a27c2c87-6022-4ab2-8cf7-66e3538fe129"><strong>支持SD卡</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#92f705ee-c53b-41f4-907d-e6ac237d9c5d"><strong>支持网络共享samba</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#31ab6f39-e7d8-42cf-aef4-23657f1e232e"><strong>设置STA功能</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#f893a8b0-9da7-4c5d-9f4d-0677ed37f6c6">扫描附近AP：</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a83ce904-99f2-4351-a7c1-5ca3048d943f">设置STA：</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c47a8973-e9e8-432c-8ef4-0213f7a25df2"><strong>直接修改/etc/config的配置文件</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#92d4a3ac-58cc-452a-9c2c-c17563d775ca"><strong>隐藏SSID</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4cd98ac1-d6de-46b4-a638-8cbef485e8b6"><strong>串口使用</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c560b874-84d0-4292-abab-467d18a36852"><strong>mtkopenwrt自带命令</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#35e4d17a-ca5b-45e4-b5df-ccb0c27315bf"><strong>硬件限制及注意事项</strong></a></div></nav><h2 id="2480062c-341f-49f6-a123-980243425f6d" class=""><strong>MTK提供的Openwrt版本</strong></h2><p id="fe466d5d-9840-42be-98d1-ec0711045172" class="">版本名称是Barrier Breaker 版本号是14.07</p><h2 id="8e3440ad-c7c8-481d-a9e0-d3ac46519ce8" class=""><strong>Openwrt编译环境</strong></h2><p id="2860d63b-3c9e-4515-a626-bc0e2755fcfb" class="">编译虚拟机在百度网盘（使用vmware虚拟机）：</p><p id="cf7f6960-feb4-4ecc-b603-fb17dac217a6" class="">链接: https://pan.baidu.com/s/1fE5BrAIC8I3tjR1i6tv6cw 提取码: n86v</p><h3 id="7d19ac7c-62b3-4432-a2ff-ebe156612403" class=""><strong>虚拟机的构建方法：</strong></h3><p id="37745cd2-b004-47fc-baa7-70b1c9fc9f15" class="">这里使用开源的VirtualBox作为演示的虚拟机方案</p><p id="257f2812-c053-4226-886f-ba09a11a3d19" class="">下载地址：<a href="https://www.virtualbox.org/"><span style="border-bottom:0.05em solid">https://www.virtualbox.org/</span></a></p><p id="b46b4a69-22b3-4d19-8cc2-35984f3cf9c2" class="">下载的虚拟机硬盘文件是一个压缩包 拆分成两个文件，解压时 只需要解压ubuntu.7z.001既可</p><figure id="a652ae6f-adc8-4bc0-b7e6-9817b2d1fe83" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled.png"><img style="width:906px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled.png"/></a></figure><p id="56d094f0-b974-463b-939d-7e4261226742" class="">下载完成后解压</p><figure id="4ad793d8-11f4-4db1-ae54-d15a653a2404" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%201.png"><img style="width:1137px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%201.png"/></a></figure><p id="2a37f4b6-5cf3-4469-85b3-bb7a4b152934" class="">安装virtualbox虚拟机软件</p><p id="3873639c-e4f8-418c-a3b7-ee3dc2d32679" class="">软件下载地址：<a href="https://www.virtualbox.org/">https://www.virtualbox.org/</a></p><p id="a0ae5ff8-981d-49ac-b100-91d878264c39" class="">
+</p><h3 id="48c7b1d6-f4e0-4d36-8be5-2239326ca1bc" class="">新建一个虚拟机</h3><p id="8dabf092-1ad1-4c82-8525-3ee07bd9b3af" class="">类型选择Linux</p><p id="204c828c-2c9a-43d2-ac87-27fd3248c8f2" class="">版本选择 Ubuntu(64-bit)</p><figure id="520d8ab1-533e-481d-9331-2a6a230df8ee" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%202.png"><img style="width:836px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%202.png"/></a></figure><p id="424ad920-ff06-41ce-84fd-7ac1d47d1f15" class="">内存建议2G以上</p><figure id="d25d5200-8111-4eeb-af51-009e52c980fa" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%203.png"><img style="width:751px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%203.png"/></a></figure><p id="5fadd662-abf2-4117-b1af-d07057b25523" class="">使用已有的虚拟硬盘文件</p><figure id="b7d5f6d6-8f41-4e4a-8248-56f50cc16829" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%204.png"><img style="width:743px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%204.png"/></a></figure><p id="9369e93c-474c-41a5-8dc5-e55a50cd5cb6" class="">注册虚拟硬盘：</p><figure id="9a7cb9f3-5c31-4078-bea4-3a0580346ee4" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%205.png"><img style="width:1124px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%205.png"/></a></figure><figure id="862c3a55-0fe0-4310-ac94-73eca76f1473" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%206.png"><img style="width:1147px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%206.png"/></a></figure><figure id="a73cf013-1adf-4637-9274-77a96e705407" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%207.png"><img style="width:1139px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%207.png"/></a></figure><figure id="654cdf80-3c4d-4956-a8c8-ae6a9fcd727d" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%208.png"><img style="width:745px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%208.png"/></a></figure><h3 id="7b469cf8-0bf2-4528-97ed-a72df22f5a51" class="">设置CPU 网络等参数</h3><p id="94f0fdeb-7bac-48b2-ab25-ea59b9ee9ee3" class="">网卡1设置为 主机网络 用来 本机访问虚拟机</p><figure id="a4aa42a3-2403-4d3d-a8f0-6b1bdc2cb3f9" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%209.png"><img style="width:1147px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%209.png"/></a></figure><p id="1d760793-1df6-45be-9a9b-47031bec5467" class="">网卡2 设置为桥接网卡</p><p id="f268baca-f6cf-4802-88a4-52a0a5be9697" class="">桥接网卡 选为 可以联网的网口 用作虚拟机连接外网</p><figure id="0be7e1f0-f208-4fc8-b0a0-d30e1a60e1c8" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2010.png"><img style="width:1142px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2010.png"/></a></figure><p id="18db0762-3e4a-46d9-a453-5f9871306061" class="">创建完成后 启动虚拟机</p><p id="ed90e0f6-8fc0-4322-8e01-8ac15f312fbf" class="">用户名：luke  密码： luke</p><p id="4cf58f57-3776-40f3-8e48-080f98a67df0" class="">启动进到系统后</p><p id="c38b5234-e7dd-4578-a49f-1e8ef9e483fa" class="">查询网口</p><p id="612f7435-99c9-43be-8f97-87ceb003c1bf" class="">Eth0 ： 既主机HOST 网络 用来和 本地通信 （IP地址 每个系统可能不同）</p><p id="83f94932-39c7-4c03-b26f-602b1e6d7c3f" class="">Eth1 ： 既桥接网卡网络 用于虚拟机连接外网 （IP地址 由桥接的网络分配）</p><figure id="cb6fd4a4-d201-40b6-a395-ed83abc8674a" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2011.png"><img style="width:1120px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2011.png"/></a></figure><p id="aaa847ef-0ee3-49e5-b130-8ca06b86020c" class="">SDK源码目录</p><p id="4e4a6f11-6dc8-44b5-8177-b5859d6db43f" class="">打开终端 进入到MtkOpenwrt目录下</p><figure id="fd91caea-b314-4deb-aa37-c3fc302aa023" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2012.png"><img style="width:805px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2012.png"/></a></figure><pre id="73c5efab-3f6e-4ed3-851c-b8ce0266110e" class="code"><code>make menuconfig
+#可以先使用默认配置进行编译
+
+make V=99 -j4 #(-j取决于 虚拟机使用了几核CPU)
+
+#编译完成，编译出的固件在路径bin/ramips/下
+
+#名称为：openwrt-ramips-mt7628-mt7628-squashfs-sysupgrade.bin
+
+
+
+#如果是一个新安装的ubuntu系统 编译一个openwrt一般需要安装的软件大概有：
+
+sudo apt-get update
+
+sudo apt-get install build-essential gawk git vim subversion zlib1g-dev libncurses5-dev quilt texinfo cmake make python2 samba openssh-server</code></pre><p id="cea927d0-3590-4c95-b48c-a81d4aa2cbcb" class=""><mark class="highlight-purple"><strong>#如果定制 添加自己的程序 会引起固件变大 SDK默认的 固件大小最大只能到8M，如果超过8M 默认是编译不出固件的
+
+#需要修改：target/linux/ramips/image/Makefile中 的Default8M 改为16 或32</strong></mark></p><figure id="8acab173-66fd-4fe8-833b-fd5d1b0855c0" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2013.png"><img style="width:1061px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2013.png"/></a></figure><p id="77fa3e16-2f2c-4f02-bf3e-a2db95dc68d8" class=""><mark class="highlight-pink"><strong>虚拟机的用户名luke  密码：luke</strong></mark></p><p id="3525066c-3dc0-4f98-b482-c82eaf83b8bc" class="">虚拟机中自带了Mtk Openwrt的源码，/home/luke/MtkOpenwrt,  已经有默认配置， 可以直接编译。</p><p id="80560f44-9006-47fb-8e56-38e0ee9e2b81" class="">编译时可能会遇到问题</p><figure id="0291e736-d4fd-4141-bd64-f3d5f88c3937" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2014.png"><img style="width:1060px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2014.png"/></a></figure><pre id="1a01176f-69ff-4eee-b62e-f4082dd19696" class="code"><code>make kernel_menuconfig-&gt;
+Ralink Module  ---&gt;
+
+[*] WiFi Driver Support  ---&gt;
+
+[]   WiFi packet forwarding
+#把WiFi packet forwarding  的*去掉 重新编译</code></pre><p id="87a9a1e3-8361-4622-bba6-e7d24ab2fb3c" class="">虚拟机共享目录到主机：</p><pre id="a109d250-05db-41c3-8812-8fa6b4de202e" class="code"><code>sudo apt-get install samba
+
+#修改/etc/samba/smb.conf,在文件末尾添加：
+[share]
+    comment = Shared Folder with username and password
+    path = /home/luke
+    public = yes
+    writable = yes
+    valid users = luke
+    available = yes
+    browseable = yes
+    guest ok = no
+#添加samba的用户名和密码
+sudo smbpasswd -a luke</code></pre><p id="b7d4bc53-c660-4aa4-a7d3-8374bc7241df" class="">
+</p><h2 id="e0b10f18-44d8-4dbf-9cb5-cc2ae1e9fcfe" class=""><strong>Openwrt配置编译</strong></h2><p id="349e62f2-9d0f-439b-8e85-db8a19e99a17" class="">SDK中已经存在一个默认配置，满足路由的基本功能，客户也可以根据自己的需求，进行自定义配置</p><p id="fe3b6df1-fc95-4046-a5f9-cc3bac168017" class="">命令： </p><pre id="5413fe54-0225-4352-872c-5513b6d75475" class="code"><code>make menuconfig</code></pre><figure id="9160496d-c8b2-4aab-a3ad-b6da72065fc5" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2015.png"><img style="width:947px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2015.png"/></a></figure><p id="b342c2bf-d01c-4110-ad63-ba802f0c56a2" class="">WIFI驱动配置在 MTK Properties-&gt; Drivers  ---&gt;kmod-mt7628 下
+如需要STA功能可以选择：AP-Client Support</p><figure id="f01a789a-7299-418b-a4fd-c69e2951b6d3" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2016.png"><img style="width:966px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2016.png"/></a></figure><pre id="dd60b8ed-efaf-44f2-a792-3b916c0f8839" class="code"><code>使用命令 
+make V=99
+#编译结果保存在bin/ramips/目录下
+#生成固件名：openwrt-ramips-mt7628-mt7628-squashfs-sysupgrade.bin</code></pre><p id="b19149bf-cd6d-4a85-a47f-b91055f67a88" class="">
+</p><h2 id="460f0e9e-b190-4747-a921-91357007ec20" class=""><strong>使用reg 命令控制7688/7628的寄存器</strong></h2><p id="2bc6a4a0-6c4a-4377-9787-5c1c17ff2772" class="">MtkOpenwrt可以使用reg命令对7688/7628的寄存器进行配置</p><p id="7ea6b434-2880-4591-b8e0-cab372ec67a2" class="">在需要在配置固件时加入reg命令：</p><pre id="465cf51e-2206-4d71-8aaa-0b8991c942f7" class="code"><code>make menuconfig -&gt;
+	MTK Properties-&gt;
+		Applications-&gt; 
+			&lt;*&gt; reg #勾选上reg， 升级固件后重启。</code></pre><ol type="1" id="3e0232fb-534d-47ba-95c5-16ca6dda9267" class="numbered-list" start="1"><li>reg s 0 设置寄存器地址的偏移量 0 表示 寄存器地址设置为MT7688的datasheet 第五章中描述的sysctl base address。<mark class="highlight-red"><strong>在使用其他命令前必须先使用一次</strong></mark></li></ol><ol type="1" id="7ee9d7bc-5e99-478c-8ccb-2144d6647c53" class="numbered-list" start="2"><li>reg r 60 读取GPIO1_MODE 寄存器的值</li></ol><ol type="1" id="be5c9b9c-3aaa-4141-9a69-d24412972b9c" class="numbered-list" start="3"><li>reg w 60 xx 设置GPIO1_MODE 寄存器的值</li></ol><p id="6d9c5812-5306-4915-b009-8b58a261b900" class="">示例：默认代码编译完成后 GPIO1_MODE的寄存器默认设置UART1为GPIO模式</p><p id="d3c4ebf2-0975-45c9-84e6-f543656156af" class="">可以进行如下操作把UART1_MODE设置为UART1-Lite模式</p><pre id="90d271cc-2976-4146-8fb2-c42ca3d58178" class="code"><code>reg s 0
+reg r 60   #读取GPIO1_MODE的寄存器值为0x55044410</code></pre><p id="cdd1fe26-a54a-4f5f-bb70-d0948cbfc477" class="">
+</p><p id="7647ba7a-9656-43dc-8e81-bfa7ac0b02f1" class="">通过读取7688的datasheet可以确认GPIO1_MODE的24：25bit 是用于控制UART1的引脚的模式，0表示把UART1引脚配置为uart1-lite，1表示把UART1引脚配置为GPIO模式，使用命令</p><pre id="82bd111c-7b4e-42d8-91ac-9917fb584b27" class="code"><code> reg w 60 0x54044410 #（把24：25bit置为0）</code></pre><p id="85c49abe-8555-4c30-a707-ca739d904372" class="">验证UART1是否是串口：使用echo aaaaaaa &gt;/dev/ttyS0(UART1 在系统中的设备)</p><p id="97c60260-2598-4712-a67a-e33fb2de0841" class="">其他命令选项，可以通过reg  --help 学习用法</p><p id="87eb3476-f416-4258-a697-2ab8edeb529b" class="">设置功能脚的引脚作为GPIO也是类似用法</p><p id="6b087c2e-0f39-44b2-85fd-e07b43c28496" class="">使用reg 命令控制作为GPIO引脚的输入输出功能</p><p id="7bb4353e-7137-4516-91bf-68ab3562698f" class="">通过reg命令可以控制寄存器使相应引脚进入到GPIO模式</p><p id="c0f5dc17-f922-4696-9f35-5283ba056243" class="">
+</p><p id="680399ff-e93b-494d-88cb-aafee53fc8ce" class="">reg命令 还用来控制GPIO引脚作为输入还是输出</p><p id="f5d35e7b-9865-4ef3-846c-d940507bca5b" class="">示例：GPIO0引脚默认既作为GPIO引脚，通过reg命令控制寄存器设置GPIO0引脚作为GPIO的输出模式并输出高低点评：(GPIO0的gpio索引号是11)</p><p id="a8d26ed8-4107-4cff-b65e-21652e5c21b0" class="">
+</p><p id="257eb324-4292-4b8a-af1c-c9e9a9a2b59c" class="">参看MT7688_Datasheet_v1_4.pdf手册的5.8一节，描述了7688的GPIO寄存器</p><p id="49dc63c6-a2c0-4283-ba00-aa3076a61137" class="">GPIO_CTRL_0寄存器用以控制0~31号gpio的方向，设置为0表示输入，设置1表示输出</p><p id="9f37af47-1358-4b63-a86f-bb0717db5b2b" class="">reg r 600 读取GPIO_CTRL_0寄存器的值为0</p><p id="7a19bbd5-868a-43b3-99b1-84fc95d9a260" class="">把gpio11设置为输出模式 可以使用命令 :</p><pre id="fdbd4937-9e6a-477c-bc54-ad301d66ab6e" class="code"><code>reg w 600 0x800</code></pre><p id="b147bee5-8333-448c-935a-a32fee7aa725" class="">设置gpio11为高电平：写入GPIO_DSET_0寄存器的bit11控制gpio11为高电平</p><pre id="e29ff8ea-fad7-453e-a82e-1359919e53f8" class="code"><code>reg w 630 800</code></pre><p id="d044838f-e373-4a74-b255-2764d04b996c" class="">设置gpio11为低电平：写入GPIO_DSET_0寄存器的bit11 控制gpio11为低电平</p><pre id="ef833a65-5026-4756-b33b-4642a9e2fa55" class="code"><code>reg w 640 800</code></pre><p id="ea7ee3d0-a1db-4cc4-aef9-29d2ac8a597c" class="">设置引脚为GPIO的输入类似， 对于GPIO11 只需要控制GPIO_CTRL_0的bit11为0即可</p><p id="248ade1c-0d1a-4848-a745-29cfc67af939" class="">
+</p><h2 id="e2fabf0a-1857-480e-9ad0-8e56cdba066c" class=""><strong>配置WIFI的STA功能</strong></h2><p id="4d067dca-c8c8-4fab-8a0e-a1284708625a" class="">在这个版本的openwrt的WIFI驱动是一个AP+STA共存的apclient功能，源码对于APClient的支持目前仅限于命令行 和 配置文件，不支持在luci页面中进行配置，只能通过命令行对周围的AP进行扫描并配置。</p><p id="4d0be1fc-7e62-4964-9ba0-06fab70c33c4" class="">扫描AP命令：</p><pre id="8a9ae1d5-96fa-4f99-aac7-2f5b647ca3e4" class="code"><code>iwpriv ra0 set SiteSurvey=1;sleep 3;iwpriv ra0 get_site_survey</code></pre><p id="2ed27f79-3ab0-4529-8aae-983234db94cf" class="">配置STA</p><ol type="1" id="06ca2858-9037-4298-b93d-36e6e64a853d" class="numbered-list" start="1"><li>通过修改/etc/config/wireless配置文件</li></ol><pre id="97ee154d-f3c8-4808-8eb9-43c096b6f830" class="code"><code>config wifi-iface
+option device   mt7628
+option ifname   ra0
+option network  lan
+option mode     ap
+option ssid     mt7628-1912
+option encryption psk2
+option key      12345678</code></pre><p id="967fe584-c3fc-4e5e-9ec0-9c1bd2141c0c" class="">
+</p><p id="62f4c6e8-c14a-4156-897b-9e35cd38faf5" class="">添加下面的配置参数</p><pre id="19c35306-d213-4dfc-9d97-e997bf02102e" class="code"><code>option ApCliEnable &#x27;1&#x27;
+option ApCliSsid &#x27;zhongxing&#x27;
+option ApCliAuthMode &#x27;WPA2PSK&#x27;
+option ApCliEncrypType &#x27;AES&#x27;
+option ApCliWPAPSK &#x27;12345678&#x27;</code></pre><p id="66b9898f-64d5-4568-ba36-ab417778bfd4" class="">
+</p><p id="e57b13f2-49f8-42a9-9d06-e97ecef1ff44" class="">完成后 配置WAN口到apcli0</p><p id="4aa7ba68-ef42-4587-b309-37d374b65e3d" class="">修改/etc/config/network</p><pre id="0f8ba16a-00b0-4a96-806f-7a8346a8df74" class="code"><code>config interface &#x27;wan&#x27;
+option proto &#x27;dhcp&#x27;
+option ifname &#x27;apcli0&#x27;</code></pre><pre id="944ffe45-f09b-4e11-9ebe-e0cf7bcc8e8f" class="code"><code>#重启网络
+/etc/init.d/network restart</code></pre><p id="744908f2-71b1-402f-bb40-7351f3d31ad6" class="">
+</p><h2 id="3f2853a6-2422-4b05-b5ea-e70131e21a40" class=""><strong>Openwrt的出厂配置恢复方法</strong></h2><p id="e7d01423-7bac-4308-bf80-c3fbfde5989d" class="">在命令行输入:</p><pre id="0fef44e9-ee0b-44a4-b4f7-0cafe1f9d1f4" class="code"><code>umount  /dev/mtdblock6; firstboot -y</code></pre><p id="0286cbf5-c76e-461d-b9f3-56c36a1094ae" class="">firstboot 输入Y 确认恢复默认</p><p id="d808d5cb-1479-44a5-a903-ae4aa2f219ce" class="">Openwrt将会被清除已有的配置信息，恢复为默认出厂配置</p><h2 id="c4d20d8c-bf18-42c3-9e7b-c8f3572a85ec" class=""><strong>Openwrt中的网口配置</strong></h2><p id="fc00c59e-a2ba-465d-924f-8fa667cb541f" class="">出厂固件默认的网口配置对照底板示意：</p><figure id="506ccaa2-673a-4ce4-b9d2-872bd710949c" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2017.png"><img style="width:752px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2017.png"/></a></figure><pre id="1511df1b-ad99-4356-a3d0-1a87ebd2115d" class="code"><code>#网口从左到右分别对应7688/7628的 P0 P1 P2 P3 P4引脚
+#Openwrt下的所谓的LAN WAN口是通过脚本进行配置的
+#./build_dir/target-mipsel_24kec+dsp_uClibc-0.9.33.2/switch/ipkg-ramips_24kec/switch/lib/network/switch.sh中
+setup_switch()
+{
+	#configEsw LLLLW  配置P4为WAN口
+	configEsw WLLLL     配置P0为WAN口
+}
+#LLLLW  （P4为WAN口）在底板上的位置如图：</code></pre><figure id="0eb16a29-400b-477a-b61e-bd353d469337" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2018.png"><img style="width:681px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2018.png"/></a></figure><p id="bb03e84a-0e94-4046-9c2f-ac36a6c7492e" class="">WLLLL (P0为WAN口)在底板上的位置如图：</p><figure id="d5027a3b-4071-4be1-9ba5-e70ae82b5260" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2019.png"><img style="width:739px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2019.png"/></a></figure><pre id="806a834f-81de-4f8f-af8f-aeb8ea8956ea" class="code"><code>#如临时需将WAN口更换为LAN口 ， 可以单板上修改/lib/network/switch.sh文件，setup_switch()
+{
+	configEsw WLLLL #如果W在左边 则改到右侧， 如果在右侧则改到左侧
+}</code></pre><p id="de5254bf-6ae9-48f9-8156-898f156fafc0" class="">
+</p><p id="d148aa66-3050-4956-b43f-22908a35975d" class="">
+</p><h2 id="8dd71bce-51ba-4b24-a29d-f9642b05f4dd" class=""><strong>在openwrt中添加自己的应用并编译到固件中</strong></h2><p id="d99f53c4-d055-48dd-a6a5-10620044c018" class="">下面用helloworld工程示例如何在openwrt中添加一个应用</p><p id="14143558-f1cf-4831-b28b-aa1ccbf4f2b9" class="">在package下创建一个目录 helloworld</p><p id="d055e808-b3c5-46cf-badd-99f07b8b9b59" class="">在helloworld目录下创建Makefile文件：文件见附件：</p><figure id="d5ad651d-3112-40c8-ae45-40c5628112d6"><div class="source"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Makefile.txt">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d07b6e01-faf4-4dc4-9a47-7e952ac9086a/Makefile.txt</a></div></figure><p id="7d8ba175-4a54-4d6f-8f46-a6198dc52d36" class="">Makefile的规则描述，详细文档可以参考：<a href="https://openwrt.org/docs/guide-developer/packages"><span style="border-bottom:0.05em solid">https://openwrt.org/docs/guide-developer/packages</span></a></p><figure id="4d627d29-01fe-4844-a6c7-ad962494087e" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2020.png"><img style="width:1225px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2020.png"/></a></figure><p id="3e47a5e4-c1c5-468d-920f-0a962c02952d" class="">示例代码打包见附件：</p><figure id="1885f6fe-ec19-4b84-a56b-c37e797565fa"><div class="source"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/helloworld.tar.gz">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a207b826-d6f0-4750-9a3f-8237f6bb04a0/helloworld.tar.gz</a></div></figure><p id="07263956-39de-4fd3-9763-bbd2b266897e" class="">直接解压到openwrt的package目录下</p><p id="0aeb84cc-62ff-4ca7-bcaf-f295aecfc65d" class="">Helloworld目录下的src目录是存放源代码的地方：</p><p id="51edc079-8899-4d75-9411-164a53c249aa" class="">示例中src目录下的Makefile才是真正用来对代码进行编译的Makefile。</p><p id="4c4ca2f5-cf1b-4ccb-959b-db70ddc26ff6" class="">客户也可以根据自己的需求编写makefile ，需要注意的几个地方 a. openwrt编译工具的名字是：mipsel-openwrt-linux-uclibc-开头的交叉编译器</p><p id="d5b8b2ed-cedc-4c94-9e68-62e55cc4738e" class="">不能直接使用mipsel-openwrt-linux-uclibc-ld进行链接。</p><p id="c24a830f-f724-465d-b188-8ae7c7315f78" class="">如果使用示例中带的Makefile，对于简单的工程是可以的，它可以遍历src目录所有的.c文件进行编译</p><p id="282c6ae4-4a63-48dd-8afc-8f0e82e506d6" class="">Makefile的描述：</p><figure id="69f1fa69-91b5-4808-b210-96620d04bcc8" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2021.png"><img style="width:1146px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2021.png"/></a></figure><p id="7cc9b4bb-948e-4bfc-9f6a-09243748f182" class="">文件创建完成后，使用make menuconfig对openwrt进行配置：</p><figure id="cb810d4c-1ce9-429d-9cbf-aa249538deda" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2022.png"><img style="width:1167px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2022.png"/></a></figure><p id="c8ccb707-46ba-4e8c-8607-cfcde0a34710" class="">选中后 进入到工程目录下进行make 编译完成后将固件升级后</p><p id="6538cab6-9246-4285-a6f9-c565478d370d" class="">
+</p><p id="a4690fbe-854d-4186-a69f-e20665956ec8" class="">编译时库的依赖问题：<div class="indented"><p id="25541a60-308b-4987-9110-335b267f683f" class="">如果使用了pthread多线程库</p><p id="395214be-64bb-4856-a119-adde9a21611f" class="">可以在外层Makefile中添加如下：</p><figure id="40522dd9-6a51-4702-80ad-f59786847f4f" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2023.png"><img style="width:991px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2023.png"/></a></figure></div></p><p id="47f398ab-5c81-4342-bccd-fff20dacbd75" class="">还有一种方法，可以在编译时欺骗openwrt的编译过程</p><p id="cf807e68-6028-4baf-9617-255cdf4afee1" class="">在Makefile中添加：</p><pre id="9e5a4351-b54f-4b99-9b8c-ce16a1048917" class="code"><code>define Package/helloworld/extra_provides
+echo &quot;libpthread.so.0&quot;</code></pre><p id="dc12b3af-91f1-4c4a-b9b2-ca0962930176" class="">
+</p><p id="9bddb8ae-eed6-48fb-965c-5f1f195a3a5e" class="">这样在编译时，就不会出现因为缺少某个库而报错了。但应用实际是运行不了的，需要把相应的库copy到系统库目录下才可以。</p><p id="b9483bba-e806-4496-a880-16a26ca4a718" class="">上电启动脚本：</p><p id="b011ed7e-4999-4984-8d92-9d3af473b85c" class="">Openwrt的上电执行/etc/init.d下的脚本 并按照脚本中的START变量大小依次执行。</p><figure id="6ccb7e2c-5792-471f-885d-23ab6e51e9b9"><div class="source"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/hello.init">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/84a3d64e-e9c9-49a8-af0b-8e7f5d89a9bf/hello.init</a></div></figure><p id="9ef206cb-3ed6-499e-a0cb-9c66cce72d70" class="">启动脚本的写法参见：</p><figure id="3a487789-66aa-4d68-a855-544a1fcd9a0b" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2024.png"><img style="width:1007px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2024.png"/></a></figure><p id="346ddb70-67f4-4e80-81ca-300bd5567cc4" class="">
+</p><p id="6ef4b20e-a3c6-4a7f-ae6f-87ee5ed7bc16" class="">
+</p><h2 id="71b63852-fe70-40e1-8ad2-f71befa4b5d7" class=""><strong>使用C语言控制GPIO</strong></h2><p id="cedbb002-bd5d-432d-9dd7-ab27f132cd11" class="">代码示例：</p><figure id="fa58571f-e87c-47b0-83f9-bbfe82948285"><div class="source"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/gpio.tar.gz">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/69e0e71b-daf0-4475-a0e7-45cc754d30e1/gpio.tar.gz</a></div></figure><p id="d2e525b6-3bba-41df-8f75-6e638c985427" class="">直接替换package/ramips/applications/gpio下的文件即可，替换完成后使用make menuconfig 添加gpio：</p><p id="ec816b10-247a-4c71-ad65-9621108c8127" class="">MTK Properties  ---&gt;Applications  ---&gt; &lt;*&gt; gpio.............................................. Command to config gpio</p><p id="aa94e765-879c-46d9-9637-f0457cef9efb" class="">内核的补丁：</p><figure id="8521a72c-1e15-4b87-b641-cd042eddf964"><div class="source"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/072-mtkgpio.patch">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/07b40f71-ddd0-4ffe-988d-ef2f881be4a1/072-mtkgpio.patch</a></div></figure><p id="676d1e0d-d4db-4fc3-ae7d-5891a0ef649f" class="">把补丁放到target/linux/ramips/patches/目录下</p><pre id="674dc8d1-1e62-4739-886f-94b889c991bc" class="code"><code>gpio getdir [gpio]
+gpio setdir [gpio] [dir]     dir----0:IN 1:OUT
+gpio read   [gpio]
+gpio write  [gpio] [val]      val----0/1
+gpio notify [gpio] [pid]     notify pid and proc signal
+gpio led    [gpio] [on] [off] [blink] [reset] [times]</code></pre><p id="c1290fc0-bb2c-40e7-86ec-9d8ed279fe65" class="">
+</p><h3 id="485e7523-2e7b-44ec-bf42-bdaf47941cb8" class="">MTK openwrt的GPIO驱动中实现了三个功能</h3><ol type="1" id="91d0b2c1-16d1-46b5-a353-ad3197958f6f" class="numbered-list" start="1"><li>设置GPIO方向 </li></ol><p id="d9870ace-ab2e-47dc-bcf6-f3ac376722a0" class="">操作示例：</p><pre id="1faadd2a-df10-47ef-86de-eb5383783a06" class="code"><code>#设置GPIO 11方向：
+gpio setdir 11 1 #(0: IN  1: OUT)
+#获取GPIO 11方向：
+gpio getdir 11
+#读取GPIO 11值：
+gpio read 11
+#写入GPIO 11为 1 ：需要把GPIO 11的方向设置为OUT
+gpio setdir 11 1
+gpio write 11 1</code></pre><ol type="1" id="0c0780bc-6deb-439f-86a3-a08a9d6bc3c9" class="numbered-list" start="2"><li>中断通知</li></ol><p id="0713eeed-55e1-4393-9034-c41c6d311355" class="">代码示例：</p><p id="4d718e5c-e964-4a9b-9c24-34dfa2023da9" class="">GPIO驱动实现了一套中断通知机制，设置给定GPIO触发中断，绑定GPIO到某个进程上，进而使用信号通知进程，用于按键处理，根据按键按住的时间长短有三种信号</p><blockquote id="54ce6c96-a4fd-49ad-9d93-384bda7d7998" class="">SIGUSR1    按键按住大于6S</blockquote><blockquote id="afc14887-7a0a-4408-9c76-fc1a568d03eb" class="">SIGUSR2    按键大于6S</blockquote><blockquote id="661cf65c-6be5-456a-8887-87c39415555e" class="">SIG42    按住时间上小于250ms</blockquote><p id="2e333786-85ca-4ec2-af96-06d612bef69b" class="">使用方法：</p><pre id="7497a172-4d71-421f-90f8-8c4d11bbd393" class="code"><code>gpio notify 38 `pidof gpio_notify` #绑定GPIO38 到 gpio_notify进程上</code></pre><p id="605ba770-9b62-4ab9-99af-609bd1e327be" class="">Gpio_notify的源码附件：</p><figure id="3309571c-7d51-4b0d-9f23-34c8bfa162d9"><div class="source"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/notify.tar.gz">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/448a1589-58d1-42f2-b853-6653daf8ffb1/notify.tar.gz</a></div></figure><figure id="a9acfcb5-7170-4032-9f34-5b280f0b74cb" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2025.png"><img style="width:1053px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2025.png"/></a></figure><ol type="1" id="3ba95263-2d02-40fe-8d42-033d48bb1534" class="numbered-list" start="3"><li>LED控制</li></ol><p id="89251a9b-d313-44d7-b479-3f2ce839f3f0" class="">由内核定时器控制LED的闪烁，控制代码见：</p><pre id="4da7805d-8102-4753-be89-28e8539862c5" class="code"><code>build_dir/target-mipsel_24kec+dsp_uClibc-0.9.33.2/linux-ramips_mt7628/linux-3.10.14/drivers/char/ralink_gpio.c：
+ralink_gpio_led_do_timer函数，实际控制代码宏#if defined (RALINK_GPIO_HAS_9532)的范围内</code></pre><p id="5ef3526e-0590-4dcf-ae3a-3aa4b871c381" class="">
+</p><p id="b1fe876f-b0f9-497e-be9d-0d8d4ad9da9e" class="">驱动需要 6个参数：</p><p id="4ebba972-fde9-4fc8-9e03-d565c66c617c" class="">GPIO： gpio号</p><p id="4f60e714-fe7e-4a27-bec0-2be5a8e74cd4" class="">On：</p><p id="612f2695-9574-4723-801e-cf98da73b940" class="">Off：   On+off表示闪烁比例，具体闪烁时间和 多个参数有关。</p><p id="124d2983-2cf9-4ff0-8765-af550d6b2f51" class="">on off的大致时间单位是100ms 既：on=1 off=1表示亮100ms，灭100ms</p><p id="a6350089-17d2-4864-903f-dd7704c28ad7" class="">Blinks：Blinks表示闪烁的次数（一个亮灭为一次）</p><p id="dc292bf4-f3d5-42ed-9e96-90f0a3800abf" class="">Rests：  blinks/rests 这两个参数表示闪烁/熄灭次数</p><p id="8e0e5e83-baf4-4f44-983d-9432068659e0" class="">
+</p><p id="df50372b-7b88-4cfe-bd26-74b3054b56ba" class="">比如 on=1 off=1 blink=10 rests=10表示 闪烁10/2次。</p><p id="3052da30-6ba6-4e0a-bd49-a151e26da965" class="">Times：控制次数 1</p><p id="6bd1ef50-100f-404f-b604-16b39f6082a1" class="">例如：on = 1 off = 1 blink = 10 rests = 10 times =1</p><p id="809c227c-91c0-4725-b66f-f285177581b4" class="">表示亮100ms 灭100ms 一共循环10/2 共5个周期 然后灭10/2 5个周期，循环一次</p><p id="87adedbc-887f-40fc-b019-28501c9eac6c" class="">这个驱动的LED控制比较复杂，如果需求较简单的话 ，可以参照下面的设置：</p><p id="ff9f1d9a-2ead-4f2a-9dd1-68f6e7edcf2d" class="">长亮：on &gt;= 4000</p><p id="d683354b-a996-45b5-9970-5381843e0456" class="">长灭：off &gt;= 4000  或 rests &gt;= 4000</p><p id="0175778d-08fe-4c6b-b33a-82374a7fd533" class="">快闪：on = 1 off =1 blink=4000</p><p id="87fd3928-3012-4151-991e-dd12b2cbec60" class="">慢闪：on = 5 off = 5 blink = 4000</p><p id="8a017320-d1d2-4674-b0a3-7a33161c13f2" class="">
+</p><p id="09eaa095-1a5e-4669-8743-bf76327bf6e1" class="">
+</p><h2 id="24c563dd-3b6c-4b8f-b178-157d78088f3d" class=""><strong>VLAN设置</strong></h2><p id="441feba0-95b0-45a3-9982-4304988ec4c9" class="">MTK openwrt的默认vlan配置</p><p id="0f4d3812-99f4-4918-bef3-794fdcde2547" class="">这里大致介绍一下交换芯片的VLAN管理：</p><p id="b2506c22-a31d-42a7-8f4f-5ade295d7be8" class="">
+</p><h3 id="78e1d204-65df-4fd4-8993-f74a7ea2b02b" class=""><strong>Port和vlan相关属性</strong></h3><p id="4d0589b7-d762-4e82-bb3b-6f3b5b1be189" class=""><strong>PORT属性：</strong></p><p id="0a83c252-119c-4507-a33b-8f550a944eb3" class="">PVID：端口的缺省vlan ID，当收到的数据包不带vlan tag的時候，芯片会给数据包打上PVID，然后进行转发</p><p id="87c55f8a-9f02-4cf4-9075-8ac097a11893" class=""><strong>Vlan属性：</strong></p><p id="45704d63-9172-4555-83a8-8017af222058" class="">vlan有三個重要的属性：VID，member port 和 untag port</p><p id="bc182880-4673-44ef-9083-c1f71fb708b2" class="">VID：唯一标识一个vlan</p><p id="08fbec45-eed8-4f41-89e8-32a033bfa72c" class="">Member Port：Vlan的成员端口</p><p id="2b4b05d0-7be0-439a-945e-bb2c76ec6d28" class="">当端口收到一個带vlan的数据包的時候，芯片会首先判断该端口是否是数据包所属vlan的成员端口，如果不是，直接丢弃，反之通过，当芯片要转发一个数据包的時候，只会把数据包转发到所属vlan的成员端口。</p><p id="c29612e0-7ef0-4859-ad58-26bc69da0444" class="">untag port：需要去除vlan tag的端口</p><p id="40ac91c1-7a47-48eb-a85b-34673773fda2" class="">当端口要发出某一数据包的時候，芯片会判断该数据包所属vlan在本端口是否是untag的，如果是，就去掉vlan tag，反之保留。</p><p id="4c979d98-c909-45b7-bed0-39780f435c29" class=""><strong>数据收发流程</strong></p><figure id="a7c904cd-efb6-4414-bc43-8534237791cf" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2026.png"><img style="width:753px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2026.png"/></a></figure><p id="c5dd86f2-4133-41cd-bb52-53781912fca6" class=""><strong>芯片配置</strong></p><p id="1cb31aba-8d15-490f-9944-057923646d80" class=""><strong>配置vlan的VID</strong></p><p id="07b435f8-6842-453a-8d5c-9e960e7dda09" class="">7628/7688一共有8个寄存器，用来记录VID，每个寄存器可以记录两个VID，一共可记录16个VID</p><figure id="7db2b25b-c5b5-4694-a26e-3f6b5c80ee6f" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2027.png"><img style="width:722px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2027.png"/></a></figure><p id="42a0ca3e-d6b4-4c02-9364-3958c4d2dbd6" class="">每个VID 12位，VID的范围是0 - 4095</p><figure id="715fcaa9-c192-4304-8c1e-f377291af09f" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2028.png"><img style="width:789px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2028.png"/></a></figure><p id="f43feb34-b95b-496c-9174-235670f4b0f2" class="">Mtkopenwrt的默认vlan设置命令：switch reg w 50 2001</p><p id="80fee9a3-4ffb-4748-b3d7-f3243ed81c3b" class="">既 VID0设置为VLAN1，VID1设置为VLAN2</p><p id="7d9d7b4f-98ad-42d5-bd87-b91f76672c10" class=""><strong>配置vlan的member port</strong></p><p id="fca26ea6-5cbd-4b0d-93da-87fe73ed3667" class="">为1则对应port是该vlan的成员端口</p><figure id="a558e511-a61c-4c7c-9839-7db1d9b57942" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2029.png"><img style="width:786px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2029.png"/></a></figure><p id="3e301bc7-0aa2-4899-9869-69a2c70ae2aa" class="">当设置P0为WAN口时，是这么设置MEM PORT的：</p><p id="cbc69d54-f8b2-435d-8517-732c4687bca6" class="">switch reg w 70 ffff417e</p><p id="c4c46f2c-46ea-42a1-a5c7-1b869305c943" class="">Vlan0 mem port： 7e的二进制形式：0111 1110 表示把端口P1 P2 P3 P4 P5 P6都加入到VLAN1中，</p><p id="07ec9da8-1a96-46b4-ad90-57196050ec90" class="">Vlan1 mem port： 41的二进制形式：0100 0001 表示把端口 P0 P6加入到VLAN2中</p><p id="e63fb0e7-6425-4525-852d-71ee12eea35f" class="">P6是交换芯片连接CPU的端口</p><p id="26fca19b-de02-4d91-a6cb-f458b7913db4" class=""><strong>配置vlan的untag port</strong></p><p id="dcff7343-13f9-4d27-bb73-af0a3f9ea456" class="">为1则该vlan在对应port是untag的</p><figure id="d7706a64-dff4-48d2-b51e-35b5df151b51" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2030.png"><img style="width:654px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2030.png"/></a></figure><p id="0746898e-66c7-4090-b153-bd2a2e70f1dc" class=""><strong>配置端口的PVID</strong></p><figure id="60f233e8-0164-4354-bbff-c12adc693684" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2031.png"><img style="width:871px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2031.png"/></a></figure><p id="63a7e5f4-1960-400d-b3f5-f63ef1267d3d" class="">每个寄存器控制两个端口的PVID，默认PVID为1</p><p id="06f2376a-ad77-458d-bf05-3a00d056ab89" class="">配置Port 0的PVID为2 可以使用命令switch reg w 40 1002 (1002是16进制，高位的1是Port 1的PVID设置为1)</p><p id="f32514c4-92b7-4491-803b-1f603f92cb04" class="">
+</p><p id="9ca10c54-1523-46b4-b5e5-0960bd24b0e7" class="">
+</p><h2 id="a27c2c87-6022-4ab2-8cf7-66e3538fe129" class=""><strong>支持SD卡</strong></h2><p id="181152a9-5586-411b-81cc-c682db22f87c" class="">需要配置openwrt</p><pre id="50c4e7d9-ee71-4b12-90f6-5f5ab2887205" class="code"><code>make menuconfig
+#驱动支持
+
+MTK Properties  ---&gt;
+
+	Drivers  ---&gt;
+
+		&lt;*&gt; kmod-mtk-mmc......................................... MMC/SD card support
+
+#配置文件系统支持：
+
+	Kernel modules  ---&gt;
+
+		Filesystems  ---&gt;
+
+#配置内核
+
+make kernel_menuconfig:
+
+	Ralink Module  ---&gt;
+
+		[*] One Port Only</code></pre><p id="5f396a26-34b0-4f07-ad33-676065ac309e" class="">
+</p><p id="979e7bd0-e5be-48a0-b869-c4ac26f2b9f6" class="">
+</p><h2 id="92f705ee-c53b-41f4-907d-e6ac237d9c5d" class=""><strong>支持网络共享samba</strong></h2><pre id="041522d4-a546-4935-bbca-be7ade67fb22" class="code"><code>对openwrt做配置
+make menuconfig
+	Kernel modules  ---&gt;
+		Filesystems  ---&gt;
+			&lt;*&gt; kmod-fs-cifs................................................ CIFS support
+
+#配置LUCI页面：
+
+LuCI  ---&gt;
+	Applications  ---&gt;
+		&lt;*&gt; luci-app-samba.................... Network Shares - Samba SMB/CIFS module
+
+#配置samba
+
+MTK Properties  ---&gt;
+	Applications  ---&gt;
+		&lt;*&gt; samba-server................................................ Samba Server
+
+#修改配置文件：package/network/services/samba36/files/samba.config
+
+config samba
+option &#x27;name&#x27;           &#x27;OpenWrt&#x27;
+option &#x27;workgroup&#x27;      &#x27;WORKGROUP&#x27;
+option &#x27;description&#x27;        &#x27;OpenWrt&#x27;
+option &#x27;homes&#x27;          &#x27;1&#x27;
+option &#x27;interface&#x27; &#x27;wan wwan lan&#x27;  #允许访问网口
+config sambashare
+option browseable &#x27;yes&#x27;
+option name &#x27;Share&#x27;
+option path &#x27;/mnt/sda1&#x27;
+option users &#x27;root,nobody&#x27;  #允许用户
+option read_only &#x27;no&#x27;
+option guest_ok &#x27;yes&#x27;
+option create_mask &#x27;0700&#x27;
+option dir_mask &#x27;0700&#x27;</code></pre><p id="10fa2fa4-d2c1-4170-b8ee-bceb64bd2abc" class="">
+</p><p id="cad1d815-213d-4911-8bc9-c31df394f19e" class="">
+</p><h2 id="31ab6f39-e7d8-42cf-aef4-23657f1e232e" class=""><strong>设置STA功能</strong></h2><p id="4bc0c4a6-e972-4c32-9225-e38134fc67b1" class="">MT7628 Mtkopenwrt的WIFI驱动是ApCli驱动，既可以作为AP 同时也可以作为STA连接其他无线路由器</p><p id="77749c55-f1d5-4dde-9535-097dfc0c61fb" class="">需要配置驱动：</p><pre id="712f79bd-0735-4d7d-a6b3-c0062dc4d7cc" class="code"><code>make menuconfig
+	MTK Properties  ---&gt;
+		Drivers  ---&gt;
+			&lt;*&gt; kmod-mt7628.................................... MTK MT7628 wifi AP driver  ---&gt;
+				WiFi Operation Modes  ---&gt;
+					[*] AP-Client Support</code></pre><p id="e6548f5f-993c-46d0-9d5a-2b82dd14f02c" class="">
+</p><p id="483ec43f-4362-4eaf-b3cb-09121f918b01" class="">选中AP-Client Support 后 退出 编译固件</p><p id="23627783-4292-47a4-9879-d8ed05720ff1" class="">这里介绍WIFI的配置命令：</p><h3 id="f893a8b0-9da7-4c5d-9f4d-0677ed37f6c6" class="">扫描附近AP：</h3><pre id="246af4d2-ce55-46b1-8574-000c2a7c418d" class="code"><code>iwpriv ra0 set SiteSurvey=1; sleep 3; iwpriv ra0 get_site_survey</code></pre><h3 id="a83ce904-99f2-4351-a7c1-5ca3048d943f" class="">设置STA：</h3><h3 id="c47a8973-e9e8-432c-8ef4-0213f7a25df2" class=""><strong>直接修改/etc/config的配置文件</strong></h3><p id="aa136544-e6e3-4935-8423-8ab9d17589c0" class="">示例：</p><pre id="e791f2bc-0395-489b-8b11-7a00f46be293" class="code"><code>config wifi-iface
+option device   mt7628
+option ifname   ra0
+option network  lan
+option mode     ap
+option ssid     mt7628-1912
+option encryption psk2
+option key      12345678</code></pre><p id="f5d32573-c6cc-41fd-97f3-a9509637ff34" class="">
+</p><p id="a5988bed-8b0d-4321-bd00-b6f55537e6c6" class="">添加下面的配置参数</p><pre id="94b7fab0-4de6-46ef-bd8f-8ba2446ae71a" class="code"><code>option ApCliEnable &#x27;1&#x27;
+option ApCliSsid &#x27;Hi-Link_PLC&#x27;
+option ApCliAuthMode &#x27;WPA2PSK&#x27;
+option ApCliEncrypType &#x27;AES&#x27;
+option ApCliWPAPSK &#x27;12345678&#x27;
+
+#修改option channel 为实际连接的AP的信道
+
+config wifi-device      mt7628
+option type     mt7628
+option vendor   ralink
+option band     2.4G
+option channel  6
+option auotch   2
+
+#修改后保存。
+
+#再对/etc/config/network进行修改
+
+#添加：
+
+config interface &#x27;wwan&#x27;
+option proto &#x27;dhcp&#x27;
+option ifname &#x27;apcli0&#x27; #修改网口为apcli0
+
+#修改/etc/config/firewall:
+
+#在wan域中添加list network &#x27;wwan&#x27;
+
+config zone
+option name &#x27;wan&#x27;
+option input &#x27;REJECT&#x27;
+option output &#x27;ACCEPT&#x27;
+option forward &#x27;REJECT&#x27;
+option masq &#x27;1&#x27;
+option mtu_fix &#x27;1&#x27;
+list network &#x27;wan&#x27;
+list network &#x27;wan6&#x27;
+list network &#x27;wwan&#x27;
+
+#重启网络 
+/etc/init.d/network restart</code></pre><p id="69794296-aa58-4df7-b1c9-6c5b361f707c" class="">
+</p><ol type="1" id="6f46ba77-00e3-4be2-94e5-6e0f16cbf6d6" class="numbered-list" start="1"><li>当然也可以通过UCI命令来设置：</li></ol><p id="8d0c5b80-d924-4a21-932f-4a9d8468bc7d" class="">
+</p><pre id="c7ecd362-aa60-4229-aead-36e0b2fea0c1" class="code"><code>#设置STA参数：
+uci set wireless.@wifi-iface[-1].ApCliEnable=1
+uci set wireless.@wifi-iface[-1].ApCliSsid=JDCwifi_0661
+uci set wireless.@wifi-iface[-1].ApCliAuthMode=WPA2PSK
+uci set wireless.@wifi-iface[-1].ApCliEncrypType=AES
+uci set wireless.@wifi-iface[-1].ApCliWPAPSK=sycdpi191
+uci set wireless.mt7628.channel=1
+uci commit
+
+#设置网络：
+
+uci set network.wwan=interface
+uci set network.wwan.ifname=apcli0
+uci set network.wwan.proto=dhcp
+uci commit
+
+#设置防火墙：
+
+uci add_list [firewall.@zone[1].network=wwan](mailto:firewall.@zone[1].network=wwan)
+uci commit
+
+#设置完成后重启网络
+
+#iwpriv apcli0 set ApCliAutoConnect=1
+/etc/init.d/network restart</code></pre><p id="a971377f-d449-4867-b0d4-37a8a75e1c00" class="">
+</p><p id="63c42e90-43ba-4148-8ab3-123b34a204bf" class="">也可以使用纯命令进行设置：</p><pre id="027f301b-fafd-4d84-9737-945726eb0fe0" class="code"><code>iwpriv apcli0 set ApCliEnable=0
+ifconfig apcli0 0.0.0.0
+iwpriv apcli0 set ApCliSsid=HUAWEI-3Q6QQW
+iwpriv apcli0 set ApCliWPAPSK=sycdpi191
+iwpriv apcli0 set ApCliAuthMode=WPA2PSK
+iwpriv apcli0 set ApCliEncrypType=AES
+iwpriv apcli0 set ApCliAuthMode=WPA2PSK
+iwpriv apcli0 set ApCliEncrypType=AES
+iwpriv apcli0 set Channel=8
+iwpriv apcli0 set ApCliAutoConnect=1
+iwpriv apcli0 set ApCliEnable=1
+
+#查询是否连接到AP上 可以使用命令 iwconfig
+
+iwpriv apcli0 set ApCliAutoConnect=1
+#这个命令是用来 当AP信道切换了 ，sta会主动搜索信道连接到新的信道上
+#可以用来防止有些ap会切换信道 导致连不上的问题
+#不过连上之后最好关掉 否则可能会一直切换信道 导致其他设备连不上模块的AP
+
+iwpriv apcli0 set ApCliAutoConnect=0</code></pre><p id="aa540e8e-0767-4f8f-81e2-38a449cd13ad" class="">
+</p><p id="b9300ebd-2b48-4bf2-ae0d-f2508ea070bd" class="">
+</p><h2 id="92d4a3ac-58cc-452a-9c2c-c17563d775ca" class=""><strong>隐藏SSID</strong></h2><pre id="10d0dfcd-f6f3-4bcd-a235-4b020f6578e2" class="code"><code>uci set wireless.@wifi-iface[-1].hidden=1
+uci commit
+/etc/init.d/network restart</code></pre><p id="5ceb6b1d-c88f-4f9d-867c-308978585e14" class="">
+</p><h2 id="4cd98ac1-d6de-46b4-a638-8cbef485e8b6" class=""><strong>串口使用</strong></h2><p id="1061e8ea-1008-4db6-b1f3-7c2828c8764f" class="">Mt7628/7688共有3个串口，mtkopenwrt使用了串口UART0作为调试串口，默认波特率是57600</p><p id="85fe5aaa-0a23-412f-b2de-502af24fa7af" class="">设置Uart1为串口（串口下标从0开始）</p><p id="31faf319-54bc-4882-814c-9931bbbc8bc3" class="">1) 修改源码：build_dir/target-mipsel_24kec+dsp_uClibc-0.9.33.2/linux-ramips_mt7628/linux-3.10.14/drivers/char/ralink_gpio.h</p><p id="76b4dede-fa45-4f73-9833-1bff610143ef" class="">的514行，</p><p id="cab2a195-f5ab-4240-b09f-bfd87cc9473c" class="">#define RALINK_GPIOMODE_DFT     (RALINK_GPIOMODE_UART2 | RALINK_GPIOMODE_UART3) | (RALINK_GPIOMODE_SPI_CS1) | (RALINK_GPIOMODE_WDT)</p><p id="a5f87e5f-19bd-415a-a5d9-dd71ca8acc54" class="">7688的默认把UART2  UART3  SPI_CS1  WDT功能脚作为GPIO，将RALINK_GPIOMODE_UART2 去掉，编译完成后升级固件即可 （注意 代码中宏 串口是从1开始， RALINK_GPIOMODE_UART2 表示寄存器中的UART1串口 ）</p><p id="eae2674d-986b-42ab-9acf-151211d483dc" class="">UART2默认的波特率是9600 ，固件上对应的串口设备名称： /dev/ttyS0</p><p id="6f37248d-0452-43f1-84dc-a3fa60b67ad7" class="">2) 启动后通过命令配置为串口：</p><p id="9713ae01-9809-4d50-9029-ab5597464ebc" class="">设置GPIO1_MODE寄存器，设置25:24bit为 0</p><p id="35c2a92c-2769-4809-96e0-febbf5ca5561" class="">临时设置方法：</p><p id="3be01431-a6db-4c4c-bdf0-7645d1895e61" class="">把串口2复用脚 设置为串口功能的命令：</p><pre id="950f80da-bbf3-4e03-a27b-76ec30612779" class="code"><code>reg s 0
+reg r 60 #读取GPIO1_MODE寄存器的值，读取到GPIO1_MODE的寄存器值为0x55444410，把25:24 bit设置为0
+reg w 60 0x54444410</code></pre><p id="49d54ccd-4851-41ed-98c7-67d10b96147e" class="">
+</p><p id="0d703db1-28fa-44da-806b-6ca4b22f86ad" class="">设置UART3 为串口：</p><p id="f7a095cc-2ec2-446b-bc7f-b01d21209958" class="">Mtkopenwrt的串口驱动默认只初始化了uart1 uart2两个串口需要修改代码</p><p id="1f45c033-65c8-4b37-9510-30590e571116" class="">1）添加代码补丁：</p><figure id="7847fedc-ce30-4e33-bf64-4cfe82f7cb29"><div class="source"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/071-uart2-enable.patch">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/155fd203-d2ee-471a-b66f-3cf6689aca01/071-uart2-enable.patch</a></div></figure><p id="199bf383-0eca-458f-abdf-59f4e357a5ac" class="">放到target/linux/ramips/patches/目录下</p><pre id="5b5abd3c-c6fe-4ffd-8cce-32be0334a626" class="code"><code>#配置内核
+make kernel_menuconfig
+	Device Drivers  ---&gt;
+		Character devices  ---&gt;
+			Serial drivers  ---&gt;
+				(3) Maximum number of 8250/16550 serial ports   #把串口改为3个</code></pre><figure id="fe8fb443-c8d9-4eb8-aa4f-ec2c6bcc1bad" class="image"><a href="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2032.png"><img style="width:730px" src="Openwrt%2014%2007%2003fd51de3bd34a218339cd4262412bce/Untitled%2032.png"/></a></figure><p id="66a8deba-75e0-4f55-9a5e-3d5b6bbdb12c" class="">2）源码同uart1 lite的修改</p><p id="ab53d182-aa69-46ae-b238-a9207a41c673" class="">通过命令设置：</p><pre id="12c3c8bd-2faf-4c6f-ba65-9f18ba7509aa" class="code"><code>reg s 0
+reg r 60 #读取GPIO1_MODE寄存器的值，读取到GPIO1_MODE的寄存器值为0x55444410，把27:26 bit设置为0
+
+reg w 60 0x51444410</code></pre><p id="8ef1120b-1318-477c-a0af-9160399c5ce7" class="">
+</p><h2 id="c560b874-84d0-4292-abab-467d18a36852" class=""><strong>mtkopenwrt自带命令</strong></h2><p id="ee7fb70f-81f9-4c32-a599-b47b7590bf09" class="">mii_mgr:用来设置查询phy寄存器</p><p id="d66e7134-95da-4968-913b-e720a7cbcbc1" class="">获取port的端口状态</p><p id="cfd0a300-f3af-47d7-9cdf-761aa925deda" class="">可以查看<a href="https://blog.csdn.net/subfate/article/details/44958597"><span style="border-bottom:0.05em solid">https://blog.csdn.net/subfate/article/details/44958597</span></a>介绍的PHY寄存器</p><p id="e6d747f6-8d70-414f-a9d9-307b5f0e1498" class="">port4的phy 编号为4 读取寄存器1</p><p id="8905323c-394d-4379-af9d-2f7ff874d589" class=""><strong>mii_mgr -g -p 4 -r 1</strong></p><p id="a3fc206a-c594-4d02-80a9-4bd5c669f239" class="">其中 bit2 表示端口链接状态Link Status，bit5表示Auto-Negotiation Complete 自动协商是否完成</p><p id="3c7b1ede-01e2-4df5-9da5-18369ec2943b" class="">一般插拔网线 只是这两个bit在改变</p><p id="cbf7c7fa-017b-4980-ba54-e5e2bcdda02e" class="">它与reg命令获取ESW Base address+0x80 既读取POA寄存器的29bit是相同的</p><p id="e0a2f267-e771-4d20-b60d-ac7bfe220908" class=""><strong>reg s 0;reg r 110080;</strong></p><p id="aa8cf53c-98d0-406e-9801-370f81f932d5" class="">也可以通过<strong>switch phy 4</strong>读取到 端口4的所有寄存器的值，其中01：7849和<strong>mii_mgr -g -p 4 -r 1</strong><strong>读取到的值一致</strong></p><p id="78db7b2a-fb4c-4e16-b162-d19327bee733" class="">
+</p><h2 id="35e4d17a-ca5b-45e4-b5df-ccb0c27315bf" class=""><strong>硬件限制及注意事项</strong></h2><ol type="1" id="78936275-7624-4f93-a29b-83f4db746ca6" class="numbered-list" start="1"><li>硬件SPI 不支持全双工模式</li></ol></div></article></body></html>

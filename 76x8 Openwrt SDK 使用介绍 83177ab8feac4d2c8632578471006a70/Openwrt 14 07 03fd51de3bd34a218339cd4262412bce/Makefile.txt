@@ -1,0 +1,40 @@
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=helloworld
+PKG_RELEASE:=1
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/helloworld
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/helloworld
+	SECTION:= HELLO WORLD
+	CATEGORY:=HELLO WORLD
+	TITLE:=Hello World App
+endef
+
+define Package/helloworld/description
+	Hello World Application
+endef
+
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	cp -rfd ./src/* $(PKG_BUILD_DIR)/
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR)
+endef
+
+
+define Package/helloworld/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/helloworld $(1)/usr/bin
+	$(INSTALL_BIN) ./files/hello.sh $(1)/usr/bin
+	$(INSTALL_BIN) ./files/hello.init $(1)/etc/init.d/helloworld
+endef
+
+
+$(eval $(call BuildPackage,helloworld))

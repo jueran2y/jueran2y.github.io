@@ -1,0 +1,95 @@
+Index: linux-4.14.171/drivers/mtd/devices/m25p80.c
+===================================================================
+--- linux-4.14.171.orig/drivers/mtd/devices/m25p80.c	2020-02-15 05:32:24.000000000 +0800
++++ linux-4.14.171/drivers/mtd/devices/m25p80.c	2022-12-24 09:55:35.852114064 +0800
+@@ -22,12 +22,18 @@
+ 
+ #include <linux/mtd/mtd.h>
+ #include <linux/mtd/partitions.h>
++#include <linux/fs.h>		// for basic filesystem
++#include <linux/proc_fs.h>	// for the proc filesystem
++#include <linux/seq_file.h>	// for sequence files
++
+ 
+ #include <linux/spi/spi.h>
+ #include <linux/spi/flash.h>
+ #include <linux/mtd/spi-nor.h>
+ 
+ #define	MAX_CMD_SIZE		6
++#define OPCODE_WINBOND_ID    0x4b    /* Get flash unique id */
++
+ struct m25p {
+ 	struct spi_device	*spi;
+ 	struct spi_nor		spi_nor;
+@@ -226,6 +232,46 @@
+ 	return ret;
+ }
+ 
++u8 unique_id[8];
++
++static int unique_id_prob(struct spi_device *spi, u8 *id)
++{
++    int			tmp;
++    u8			code[5];
++
++    code[0] = OPCODE_WINBOND_ID;
++    tmp = spi_write_then_read(spi, &code, 5, id, 8);
++    if (tmp < 0) {
++        pr_debug("%s: error %d reading UNIQUE ID\n", dev_name(&spi->dev), tmp);
++        return tmp;
++    }
++    return 0;
++}
++
++// seq_operations -> show
++static int flashid_show(struct seq_file *m, void *v)
++{
++	seq_printf(m, "%02x%02x%02x%02x%02x%02x%02x%02x\n",
++					unique_id[7], unique_id[6], unique_id[5], unique_id[4],
++					unique_id[3], unique_id[2], unique_id[1], unique_id[0]);
++
++	return 0; //!! must be 0, or will show nothing T.T
++}
++
++// seq_operations -> open
++static int flashid_open(struct inode *inode, struct file *file)
++{
++	return single_open(file, flashid_show, NULL);
++}
++
++static const struct file_operations flashid_fops = 
++{
++	.owner		= THIS_MODULE,
++	.open		= flashid_open,
++	.read		= seq_read,
++	.release	= single_release,
++};
++
+ /*
+  * board specific setup should have ensured the SPI clock used here
+  * matches what the READ command supports, at least until this driver
+@@ -298,6 +344,24 @@
+ 	if (ret)
+ 		return ret;
+ 
++	{
++		if(!unique_id_prob(spi, unique_id)) {
++			dev_warn(&spi->dev, "%02x%02x%02x%02x%02x%02x%02x%02x\n",
++					unique_id[7], unique_id[6], unique_id[5], unique_id[4],
++					unique_id[3], unique_id[2], unique_id[1], unique_id[0]);
++		} else {
++			dev_warn(&spi->dev, "failed to get flash unique id.\n");
++		}
++
++		struct proc_dir_entry* flashid_file;
++
++		flashid_file = proc_create("flashid", 0, NULL, &flashid_fops);
++		if (NULL == flashid_file) {
++			
++		}
++
++	}
++
+ 	return mtd_device_register(&nor->mtd, data ? data->parts : NULL,
+ 				   data ? data->nr_parts : 0);
+ }
