@@ -9,9 +9,8 @@ date: 2020-10-01 13:56 +0800
 ---
 ## Openwrt18.06
 
-[toc]
-
-
+* TOC
+{:toc}
 ## Openwrt18.06
 
 ## Openwrt18 是 GIT社区上的开源版本
